@@ -1,0 +1,6 @@
+D:\MyWork\Designer\windows7\do-workstudio\win7src\UIControls\ScrollView\doScrollView\bin\Debug\doUIViewDesign.ScrollView.dll
+D:\MyWork\Designer\windows7\do-workstudio\win7src\UIControls\ScrollView\doScrollView\bin\Debug\doUIViewDesign.ScrollView.pdb
+D:\MyWork\Designer\windows7\do-workstudio\win7src\UIControls\ScrollView\doScrollView\bin\Debug\doControlLib.dll
+D:\MyWork\Designer\windows7\do-workstudio\win7src\UIControls\ScrollView\doScrollView\obj\Debug\doScrollView.csprojResolveAssemblyReference.cache
+D:\MyWork\Designer\windows7\do-workstudio\win7src\UIControls\ScrollView\doScrollView\obj\Debug\doUIViewDesign.ScrollView.dll
+D:\MyWork\Designer\windows7\do-workstudio\win7src\UIControls\ScrollView\doScrollView\obj\Debug\doUIViewDesign.ScrollView.pdb

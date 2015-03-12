@@ -1,6 +1,6 @@
-D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\bin\Debug\doUIViewDesign.ScrollView.dll
-D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\bin\Debug\doUIViewDesign.ScrollView.pdb
 D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\bin\Debug\doControlLib.dll
 D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\obj\Debug\do_ScrollView.csprojResolveAssemblyReference.cache
-D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\obj\Debug\doUIViewDesign.ScrollView.dll
-D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\obj\Debug\doUIViewDesign.ScrollView.pdb
+D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\bin\Debug\doUIViewDesign.do_ScrollView.dll
+D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\bin\Debug\doUIViewDesign.do_ScrollView.pdb
+D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\obj\Debug\doUIViewDesign.do_ScrollView.dll
+D:\MyWork\designer_comp\do_ScrollView\src\designer\do_ScrollView\do_ScrollView\obj\Debug\doUIViewDesign.do_ScrollView.pdb

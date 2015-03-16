@@ -16,7 +16,7 @@
 #import "doUIContainer.h"
 #import "doISourceFS.h"
 
-@implementation DoExt_ScrollView_View
+@implementation DoExt_ScrollView_UIView
 {
     BOOL _direction;
     

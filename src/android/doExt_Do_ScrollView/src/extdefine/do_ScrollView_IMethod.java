@@ -7,7 +7,7 @@ import core.object.DoInvokeResult;
 /**
  * 声明自定义扩展组件方法
  */
-public interface Do_ScrollView_IMethod {
+public interface do_ScrollView_IMethod {
 	void toBegin(DoJsonNode _dictParas,DoIScriptEngine _scriptEngine, DoInvokeResult _invokeResult) throws Exception ;
 	
 	void toEnd(DoJsonNode _dictParas,DoIScriptEngine _scriptEngine, DoInvokeResult _invokeResult) throws Exception ;

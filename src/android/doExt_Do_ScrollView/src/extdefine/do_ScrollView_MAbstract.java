@@ -5,9 +5,9 @@ import core.object.DoProperty.PropertyDataType;
 import core.object.DoUIModuleCollection;
 
 
-public abstract class Do_ScrollView_MAbstract extends DoUIModuleCollection{
+public abstract class do_ScrollView_MAbstract extends DoUIModuleCollection{
 
-	protected Do_ScrollView_MAbstract() throws Exception {
+	protected do_ScrollView_MAbstract() throws Exception {
 		super();
 	}
 	

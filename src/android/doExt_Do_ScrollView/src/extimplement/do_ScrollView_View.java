@@ -21,8 +21,8 @@ import core.object.DoInvokeResult;
 import core.object.DoSourceFile;
 import core.object.DoUIContainer;
 import core.object.DoUIModule;
-import extdefine.Do_ScrollView_IMethod;
-import extdefine.Do_ScrollView_MAbstract;
+import extdefine.do_ScrollView_IMethod;
+import extdefine.do_ScrollView_MAbstract;
 
 /**
  * 自定义扩展UIView组件实现类，此类必须继承相应VIEW类，并实现DoIUIModuleView,Do_ScrollView_IMethod接口；
@@ -31,7 +31,7 @@ import extdefine.Do_ScrollView_MAbstract;
  * 参数解释：@_messageName字符串事件名称，@jsonResult传递事件参数对象；
  * 获取DoInvokeResult对象方式new DoInvokeResult(this.model.getUniqueKey());
  */
-public class Do_ScrollView_View extends LinearLayout implements DoIUIModuleView,Do_ScrollView_IMethod{
+public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,do_ScrollView_IMethod{
 
 	private static final int PULL_TO_REFRESH = 0; // 下拉刷新
 	private static final int RELEASE_TO_REFRESH = 1; // 松开后刷新
@@ -40,7 +40,7 @@ public class Do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 	/**
 	 * 每个UIview都会引用一个具体的model实例；
 	 */
-	private Do_ScrollView_MAbstract model;
+	private do_ScrollView_MAbstract model;
 	private String defaultDirection = "vertical";
 	private DoIScrollView doIScrollView;
 	private View childView;
@@ -53,7 +53,7 @@ public class Do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 	private String headerViewAddress; // headerview 的地址
 	
 
-	public Do_ScrollView_View(Context context) {
+	public do_ScrollView_View(Context context) {
 		super(context);
 		this.setOrientation(VERTICAL);
 	}
@@ -63,7 +63,7 @@ public class Do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 	 */
 	@Override
 	public void loadView(DoUIModule _doUIModule) throws Exception {
-		this.model = (Do_ScrollView_MAbstract)_doUIModule;
+		this.model = (do_ScrollView_MAbstract)_doUIModule;
 		int childSize = model.getChildUIModules().size();
 		if (childSize == 0) {
 			return;

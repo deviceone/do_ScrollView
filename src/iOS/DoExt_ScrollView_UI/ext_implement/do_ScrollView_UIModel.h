@@ -7,6 +7,6 @@
 //
 #import "doUIModuleCollection.h"
 
-@interface DoExt_ScrollView_UIModel : doUIModuleCollection
+@interface do_ScrollView_UIModel : doUIModuleCollection
 
 @end

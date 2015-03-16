@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 DoExt. All rights reserved.
 //
 
-#import "DoExt_ScrollView_UIView.h"
+#import "do_ScrollView_UIView.h"
 
 #import "doInvokeResult.h"
 #import "doIPage.h"
@@ -16,7 +16,7 @@
 #import "doUIContainer.h"
 #import "doISourceFS.h"
 
-@implementation DoExt_ScrollView_UIView
+@implementation do_ScrollView_UIView
 {
     BOOL _direction;
     

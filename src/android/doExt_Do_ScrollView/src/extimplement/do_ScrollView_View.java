@@ -11,6 +11,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import core.DoServiceContainer;
+import core.helper.DoTextHelper;
 import core.helper.DoUIModuleHelper;
 import core.helper.DoUIModuleHelper.LayoutParamsType;
 import core.helper.jsonparse.DoJsonNode;
@@ -124,7 +125,7 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 	public void onPropertiesChanged(Map<String, String> _changedValues) {
 		DoUIModuleHelper.handleBasicViewProperChanged(this.model, _changedValues);
 		if (_changedValues.containsKey("isShowbar")) {
-			boolean verticalScrollBarEnabled = Boolean.parseBoolean(_changedValues.get("isShowbar"));
+			boolean verticalScrollBarEnabled = DoTextHelper.strToBool(_changedValues.get("isShowbar"), true);
 			doIScrollView.isShowbar(verticalScrollBarEnabled);
 		}
 	}

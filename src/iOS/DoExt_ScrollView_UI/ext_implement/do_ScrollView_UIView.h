@@ -7,15 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DoExt_ScrollView_IView.h"
-#import "DoExt_ScrollView_UIModel.h"
+#import "do_ScrollView_IView.h"
+#import "do_ScrollView_UIModel.h"
 #import "doIUIModuleView.h"
 
-@interface DoExt_ScrollView_UIView : UIScrollView<DoExt_ScrollView_IView,doIUIModuleView,UIScrollViewDelegate>
+@interface do_ScrollView_UIView : UIScrollView<do_ScrollView_IView,doIUIModuleView,UIScrollViewDelegate>
 //可根据具体实现替换UIView
 {
     @private
-    __weak DoExt_ScrollView_UIModel *_model;
+    __weak do_ScrollView_UIModel *_model;
 }
 
 @end

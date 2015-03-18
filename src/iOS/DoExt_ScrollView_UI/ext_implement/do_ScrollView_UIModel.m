@@ -6,10 +6,10 @@
 //  Copyright (c) 2015年 DoExt. All rights reserved.
 //
 
-#import "DoExt_ScrollView_UIModel.h"
+#import "do_ScrollView_UIModel.h"
 #import "doProperty.h"
 
-@implementation DoExt_ScrollView_UIModel
+@implementation do_ScrollView_UIModel
 
 #pragma mark - 注册属性（--属性定义--）
 /*

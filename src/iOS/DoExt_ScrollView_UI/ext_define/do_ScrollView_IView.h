@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol DoExt_ScrollView_IView <NSObject>
+@protocol do_ScrollView_IView <NSObject>
 
 @required
 //属性方法

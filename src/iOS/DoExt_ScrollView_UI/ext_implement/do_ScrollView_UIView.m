@@ -125,7 +125,7 @@
     doSourceFile *fileName = [pageModel.CurrentApp.SourceFS GetSourceByFileName:herderView];
     if(!fileName)
     {
-        [NSException raise:@"scrollView" format:@"无效的headView:%@",herderView,nil];
+        [NSException raise:@"scrollView" format:@"无效的headView路径:%@",herderView,nil];
         return;
     }
     doUIContainer *container = [[doUIContainer alloc] init:pageModel];
@@ -134,13 +134,13 @@
     _address = [NSString stringWithFormat:@"%@",[insertViewModel UniqueKey]];
     if (insertViewModel == nil)
     {
-        [NSException raise:@"doLinearLayoutView" format:@"创建view失败",nil];
+        [NSException raise:@"scrollView" format:@"创建viewModel失败",nil];
         return;
     }
     UIView *insertView = (UIView*)insertViewModel.CurrentUIModuleView;
     if (insertView == nil)
     {
-        [NSException raise:@"doLinearLayoutView" format:@"创建view失败"];
+        [NSException raise:@"scrollView" format:@"创建view失败"];
         return;
     }
     _headView = insertView;

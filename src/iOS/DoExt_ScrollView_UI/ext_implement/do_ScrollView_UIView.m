@@ -20,8 +20,8 @@
 {
     BOOL _direction;
     
-    UIView *_childView;
-    UIView *_headView;
+    doUIModule *_childViewModel;
+    doUIModule *_headViewModel;
     
     BOOL _isRefreshing;
     NSString *_address;
@@ -44,13 +44,11 @@
         [NSException raise:@"doScrollView" format:@"只允许加入一个子视图",nil];
     else if(childCount == 1)
     {
-        doUIModule *childModel = [_model.ChildUIModules objectAtIndex:0];
-        _childView = (UIView *) childModel.CurrentUIModuleView;
-        if(_childView)
-            [self addSubview:_childView];
+        _childViewModel = [_model.ChildUIModules objectAtIndex:0];
+        [self addSubview:(UIView *) _childViewModel.CurrentUIModuleView];
     }
     else
-        NSLog(@"没有内容");
+        [NSException raise:@"doScrollView" format:@"没有子视图",nil];
 
 }
 //销毁所有的全局对象
@@ -58,27 +56,25 @@
 {
     _model = nil;
     //自定义的全局属性
-    [_headView removeFromSuperview];
-    _headView = nil;
-    
-    [_childView removeFromSuperview];
-    _childView = nil;
-    
+    _childViewModel = nil;
+    _headViewModel = nil;
     _address = nil;
 }
 //实现布局
 - (void) OnRedraw
 {
-    //实现布局相关的修改
-    doUIModule* _childUI = _model.ChildUIModules[0];
-    id<doIUIModuleView> _view = _childUI.CurrentUIModuleView;
-    if (_view)
-    {
-        [_view OnRedraw];
-        [self setContent];
-    }
     //重新调整视图的x,y,w,h
     [doUIModuleHelper OnRedraw:_model];
+    
+    //实现布局相关的修改
+    [doUIModuleHelper OnRedraw:_childViewModel];
+    [self setContent];
+    
+    [doUIModuleHelper OnRedraw:_headViewModel];
+    UIView *headView = (UIView *)_headViewModel.CurrentUIModuleView;
+    CGFloat realW = self.frame.size.width;
+    CGFloat realH = realW/_headViewModel.RealWidth*_headViewModel.RealHeight;
+    headView.frame = CGRectMake(0, -realH, realW, realH);
 }
 
 #pragma mark - TYPEID_IView协议方法（必须）
@@ -130,26 +126,22 @@
     }
     doUIContainer *container = [[doUIContainer alloc] init:pageModel];
     [container LoadFromFile:fileName:nil:nil];
-    doUIModule *insertViewModel = container.RootView;
-    _address = [NSString stringWithFormat:@"%@",[insertViewModel UniqueKey]];
-    if (insertViewModel == nil)
+    _headViewModel = container.RootView;
+    _address = [NSString stringWithFormat:@"%@",[_headViewModel UniqueKey]];
+    if (_headViewModel == nil)
     {
         [NSException raise:@"scrollView" format:@"创建viewModel失败",nil];
         return;
     }
-    UIView *insertView = (UIView*)insertViewModel.CurrentUIModuleView;
+    UIView *insertView = (UIView*)_headViewModel.CurrentUIModuleView;
     if (insertView == nil)
     {
         [NSException raise:@"scrollView" format:@"创建view失败"];
         return;
     }
-    _headView = insertView;
-    CGFloat w = insertViewModel.RealWidth;
-    CGFloat h = insertViewModel.RealHeight;
-    _headView.frame = CGRectMake(0, -h, w, h);
-    [self addSubview:_headView];
-    const CGFloat *color = CGColorGetComponents([_headView.backgroundColor CGColor]);
-    self.backgroundColor = [UIColor colorWithRed:color[0]/255 green:color[1]/255 blue:color[3]/255 alpha:color[4]/255];
+    [self addSubview:insertView];
+    //const CGFloat *color = CGColorGetComponents([insertView.backgroundColor CGColor]);
+    //self.backgroundColor = [UIColor colorWithRed:color[0]/255 green:color[1]/255 blue:color[3]/255 alpha:color[4]/255];
     [self setContent];
 }
 
@@ -227,6 +219,7 @@
 #pragma mark - scroll delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    UIView *_headView = (UIView *)_headViewModel.CurrentUIModuleView;
     if(_headView && !_isRefreshing)
     {
         if(scrollView.contentOffset.y >= _headView.frame.size.height*(-1))
@@ -238,6 +231,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
+    UIView *_headView = (UIView *)_headViewModel.CurrentUIModuleView;
     if(scrollView.contentOffset.y < _headView.frame.size.height*(-1) && !_isRefreshing && _headView)
     {
         [self fireEvent:2 :scrollView.contentOffset.y];
@@ -250,19 +244,19 @@
 #pragma mark - private method
 - (void)setContent
 {
+    UIView *_childView = (UIView *)_childViewModel.CurrentUIModuleView;
     CGFloat w = _childView.frame.origin.x+_childView.frame.size.width;
     CGFloat h = _childView.frame.origin.y+_childView.frame.size.height;
-    
     if(_direction)
     {
-        if(_headView)
+        if(_headViewModel)
             if(w <= self.frame.size.width)
                 w = self.frame.size.width+1;
         self.contentSize = CGSizeMake(w, 0);
     }
     else
     {
-        if(_headView)
+        if(_headViewModel)
             if(h <= self.frame.size.height)
                 h = self.frame.size.height+1;
         self.contentSize = CGSizeMake(0, h);

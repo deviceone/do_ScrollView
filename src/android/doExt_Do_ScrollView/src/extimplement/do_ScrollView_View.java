@@ -432,6 +432,7 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 			super(context);
 			this.setFillViewport(true);
 			this.setBackgroundColor(Color.TRANSPARENT);
+			this.setHorizontalScrollBarEnabled(false);
 		}
 
 		@Override
@@ -473,6 +474,7 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 			super(context);
 			this.setFillViewport(true);
 			this.setBackgroundColor(Color.TRANSPARENT);
+			this.setVerticalScrollBarEnabled(false);
 		}
 
 		@Override

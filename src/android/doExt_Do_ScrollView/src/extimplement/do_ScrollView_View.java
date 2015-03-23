@@ -455,8 +455,8 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 		}
 
 		@Override
-		public void isShowbar(boolean verticalScrollBarEnabled) {
-			this.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+		public void isShowbar(boolean horizontalScrollBarEnabled) {
+			this.setHorizontalScrollBarEnabled(horizontalScrollBarEnabled);
 		}
 
 		@Override

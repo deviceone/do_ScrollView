@@ -90,7 +90,7 @@
 
 - (void)change_isShowbar:(NSString *)isShowbar
 {
-    if([isShowbar isEqual:@"YES"] || [isShowbar isEqual:@"true"])
+    if([isShowbar isEqual:@"1"] || [isShowbar isEqual:@"true"])
     {
         self.showsHorizontalScrollIndicator = YES;
         self.showsVerticalScrollIndicator = YES;

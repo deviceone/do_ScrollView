@@ -20,8 +20,8 @@
 {
     BOOL _direction;
     
-    doUIModule *_childViewModel;
-    doUIModule *_headViewModel;
+    id<doIUIModuleView> _childView;
+    id<doIUIModuleView> _headView;
     
     BOOL _isRefreshing;
     NSString *_address;
@@ -44,20 +44,21 @@
         [NSException raise:@"doScrollView" format:@"只允许加入一个子视图",nil];
     else if(childCount == 1)
     {
-        _childViewModel = [_model.ChildUIModules objectAtIndex:0];
-        [self addSubview:(UIView *) _childViewModel.CurrentUIModuleView];
+        doUIModule *childViewModel = [_model.ChildUIModules objectAtIndex:0];
+        _childView = childViewModel.CurrentUIModuleView;
+        [self addSubview:(UIView *) _childView];
     }
     else
         [NSException raise:@"doScrollView" format:@"没有子视图",nil];
-
+    
 }
 //销毁所有的全局对象
 - (void) OnDispose
 {
     _model = nil;
     //自定义的全局属性
-    _childViewModel = nil;
-    _headViewModel = nil;
+    _childView = nil;
+    _headView = nil;
     _address = nil;
 }
 //实现布局
@@ -67,14 +68,12 @@
     [doUIModuleHelper OnRedraw:_model];
     
     //实现布局相关的修改
-    [doUIModuleHelper OnRedraw:_childViewModel];
-    [self setContent];
-    
-    [doUIModuleHelper OnRedraw:_headViewModel];
-    UIView *headView = (UIView *)_headViewModel.CurrentUIModuleView;
+    [_childView OnRedraw];
+    UIView *headView = (UIView *)_headView;
     CGFloat realW = self.frame.size.width;
-    CGFloat realH = realW/_headViewModel.RealWidth*_headViewModel.RealHeight;
+    CGFloat realH = realW/headView.frame.size.width*headView.frame.size.height;
     headView.frame = CGRectMake(0, -realH, realW, realH);
+    [self setContent];
 }
 
 #pragma mark - TYPEID_IView协议方法（必须）
@@ -126,14 +125,15 @@
     }
     doUIContainer *container = [[doUIContainer alloc] init:pageModel];
     [container LoadFromFile:fileName:nil:nil];
-    _headViewModel = container.RootView;
-    _address = [NSString stringWithFormat:@"%@",[_headViewModel UniqueKey]];
-    if (_headViewModel == nil)
+    doUIModule *headViewModel = container.RootView;
+    _address = [NSString stringWithFormat:@"%@",[headViewModel UniqueKey]];
+    if (headViewModel == nil)
     {
         [NSException raise:@"scrollView" format:@"创建viewModel失败",nil];
         return;
     }
-    UIView *insertView = (UIView*)_headViewModel.CurrentUIModuleView;
+    UIView *insertView = (UIView*)headViewModel.CurrentUIModuleView;
+    _headView = headViewModel.CurrentUIModuleView;
     if (insertView == nil)
     {
         [NSException raise:@"scrollView" format:@"创建view失败"];
@@ -148,31 +148,31 @@
 #pragma mark -
 #pragma mark - 同步异步方法的实现
 /*
-    1.参数节点
-        doJsonNode *_dictParas = [parms objectAtIndex:0];
-        在节点中，获取对应的参数
-        NSString *title = [_dictParas GetOneText:@"title" :@"" ];
-        说明：第一个参数为对象名，第二为默认值
+ 1.参数节点
+ doJsonNode *_dictParas = [parms objectAtIndex:0];
+ 在节点中，获取对应的参数
+ NSString *title = [_dictParas GetOneText:@"title" :@"" ];
+ 说明：第一个参数为对象名，第二为默认值
  
-    2.脚本运行时的引擎
-        id<doIScriptEngine> _scritEngine = [parms objectAtIndex:1];
+ 2.脚本运行时的引擎
+ id<doIScriptEngine> _scritEngine = [parms objectAtIndex:1];
  
  同步：
-    3.同步回调对象(有回调需要添加如下代码)
-        doInvokeResult *_invokeResult = [parms objectAtIndex:2];
-        回调信息
-        如：（回调一个字符串信息）
-        [_invokeResult SetResultText:((doUIModule *)_model).UniqueKey];
+ 3.同步回调对象(有回调需要添加如下代码)
+ doInvokeResult *_invokeResult = [parms objectAtIndex:2];
+ 回调信息
+ 如：（回调一个字符串信息）
+ [_invokeResult SetResultText:((doUIModule *)_model).UniqueKey];
  异步：
-    3.获取回调函数名(异步方法都有回调)
-        NSString *_callbackName = [parms objectAtIndex:2];
-        在合适的地方进行下面的代码，完成回调
-        新建一个回调对象
-        doInvokeResult *_invokeResult = [[doInvokeResult alloc] init];
-        填入对应的信息
-        如：（回调一个字符串）
-        [_invokeResult SetResultText: @"异步方法完成"];
-        [_scritEngine Callback:_callbackName :_invokeResult];
+ 3.获取回调函数名(异步方法都有回调)
+ NSString *_callbackName = [parms objectAtIndex:2];
+ 在合适的地方进行下面的代码，完成回调
+ 新建一个回调对象
+ doInvokeResult *_invokeResult = [[doInvokeResult alloc] init];
+ 填入对应的信息
+ 如：（回调一个字符串）
+ [_invokeResult SetResultText: @"异步方法完成"];
+ [_scritEngine Callback:_callbackName :_invokeResult];
  */
 //同步
 -(void)toBegin:(NSArray *)parms
@@ -208,7 +208,9 @@
 - (void)rebound:(NSArray *)parms
 {
     _isRefreshing = NO;
-    self.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    [UIView animateWithDuration:0.2 animations:^{
+        self.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }];
 }
 - (void)getHeaderView:(NSArray *)parms
 {
@@ -219,44 +221,41 @@
 #pragma mark - scroll delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    UIView *_headView = (UIView *)_headViewModel.CurrentUIModuleView;
     if(_headView && !_isRefreshing)
     {
-        if(scrollView.contentOffset.y >= _headView.frame.size.height*(-1))
+        if(scrollView.contentOffset.y >= ((UIView *)_headView).frame.size.height*(-1))
             [self fireEvent:0 :scrollView.contentOffset.y];
         else
             [self fireEvent:1 :scrollView.contentOffset.y];
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    UIView *_headView = (UIView *)_headViewModel.CurrentUIModuleView;
-    if(scrollView.contentOffset.y < _headView.frame.size.height*(-1) && !_isRefreshing && _headView)
+    if(scrollView.contentOffset.y < ((UIView *)_headView).frame.size.height*(-1) && !_isRefreshing && _headView)
     {
         [self fireEvent:2 :scrollView.contentOffset.y];
-        self.contentInset = UIEdgeInsetsMake(_headView.frame.size.height, 0, 0, 0);
+        self.contentInset = UIEdgeInsetsMake(((UIView *)_headView).frame.size.height, 0, 0, 0);
         _isRefreshing = YES;
     }
 }
-
 #pragma mark -
 #pragma mark - private method
 - (void)setContent
 {
-    UIView *_childView = (UIView *)_childViewModel.CurrentUIModuleView;
-    CGFloat w = _childView.frame.origin.x+_childView.frame.size.width;
-    CGFloat h = _childView.frame.origin.y+_childView.frame.size.height;
+    UIView *childView = (UIView *)_childView;
+    CGFloat w = childView.frame.origin.x+childView.frame.size.width;
+    CGFloat h = childView.frame.origin.y+childView.frame.size.height;
     if(_direction)
     {
-        if(_headViewModel)
+        if(_headView)
             if(w <= self.frame.size.width)
                 w = self.frame.size.width+1;
         self.contentSize = CGSizeMake(w, 0);
     }
     else
     {
-        if(_headViewModel)
+        if(_headView)
             if(h <= self.frame.size.height)
                 h = self.frame.size.height+1;
         self.contentSize = CGSizeMake(0, h);

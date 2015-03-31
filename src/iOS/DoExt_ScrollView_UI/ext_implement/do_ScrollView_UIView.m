@@ -24,7 +24,6 @@
     id<doIUIModuleView> _headView;
     
     BOOL _isRefreshing;
-    NSString *_address;
 }
 
 - (instancetype)init
@@ -47,33 +46,37 @@
         doUIModule *childViewModel = [_model.ChildUIModules objectAtIndex:0];
         _childView = childViewModel.CurrentUIModuleView;
         [self addSubview:(UIView *) _childView];
+        [self OnRedraw];
     }
     else
         [NSException raise:@"doScrollView" format:@"没有子视图",nil];
-    
 }
 //销毁所有的全局对象
 - (void) OnDispose
 {
-    _model = nil;
     //自定义的全局属性
-    _childView = nil;
-    _headView = nil;
-    _address = nil;
+    //销毁model后，自动销毁view
+    if(_headView)
+    {
+        [((UIView *)_headView) removeFromSuperview];
+        [[_headView GetModel] Dispose];
+        _headView = nil;
+    }
+    if(_childView)
+    {
+        [((UIView *)_childView) removeFromSuperview];
+        [[_childView GetModel] Dispose];
+        _childView = nil;
+    }
+    _model = nil;
 }
 //实现布局
 - (void) OnRedraw
 {
     //重新调整视图的x,y,w,h
     [doUIModuleHelper OnRedraw:_model];
-    
-    //实现布局相关的修改
-    [_childView OnRedraw];
-    UIView *headView = (UIView *)_headView;
-    CGFloat realW = self.frame.size.width;
-    CGFloat realH = realW/headView.frame.size.width*headView.frame.size.height;
-    headView.frame = CGRectMake(0, -realH, realW, realH);
-    [self setContent];
+    if(_childView)  [_childView OnRedraw];
+    if(_headView)   [_headView OnRedraw];
 }
 
 #pragma mark - TYPEID_IView协议方法（必须）
@@ -126,7 +129,6 @@
     doUIContainer *container = [[doUIContainer alloc] init:pageModel];
     [container LoadFromFile:fileName:nil:nil];
     doUIModule *headViewModel = container.RootView;
-    _address = [NSString stringWithFormat:@"%@",[headViewModel UniqueKey]];
     if (headViewModel == nil)
     {
         [NSException raise:@"scrollView" format:@"创建viewModel失败",nil];
@@ -140,9 +142,13 @@
         return;
     }
     [self addSubview:insertView];
+    
+    //headView布局问题
+    [self OnRedraw];
+    [self setContent];
+    
     //const CGFloat *color = CGColorGetComponents([insertView.backgroundColor CGColor]);
     //self.backgroundColor = [UIColor colorWithRed:color[0]/255 green:color[1]/255 blue:color[3]/255 alpha:color[4]/255];
-    [self setContent];
 }
 
 #pragma mark -
@@ -215,13 +221,14 @@
 - (void)getHeaderView:(NSArray *)parms
 {
     doInvokeResult *_invokeResult = [parms objectAtIndex:2];
-    [_invokeResult SetResultText:_address];
+    doUIModule *headViewModel = [_headView GetModel];
+    [_invokeResult SetResultText:[headViewModel UniqueKey]];
 }
 
 #pragma mark - scroll delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if(_headView && !_isRefreshing)
+    if(_headView && !_isRefreshing && scrollView.contentOffset.y<0)
     {
         if(scrollView.contentOffset.y >= ((UIView *)_headView).frame.size.height*(-1))
             [self fireEvent:0 :scrollView.contentOffset.y];
@@ -241,6 +248,7 @@
 }
 #pragma mark -
 #pragma mark - private method
+#pragma mark - 调整headView的大小
 - (void)setContent
 {
     UIView *childView = (UIView *)_childView;
@@ -249,19 +257,34 @@
     if(_direction)
     {
         if(_headView)
+        {
+            UIView *headView = (UIView *)_headView;
+            CGFloat realH = self.frame.size.height;
+            CGFloat realW = realH/headView.frame.size.height*headView.frame.size.width;
+            headView.frame = CGRectMake(-realW, -0, realW, realH);
+            
             if(w <= self.frame.size.width)
                 w = self.frame.size.width+1;
+        }
         self.contentSize = CGSizeMake(w, 0);
     }
     else
     {
         if(_headView)
+        {
+            UIView *headView = (UIView *)_headView;
+            CGFloat realW = self.frame.size.width;
+            CGFloat realH = realW/headView.frame.size.width*headView.frame.size.height;
+            headView.frame = CGRectMake(0, -realH, realW, realH);
+            
             if(h <= self.frame.size.height)
                 h = self.frame.size.height+1;
+        }
         self.contentSize = CGSizeMake(0, h);
     }
 }
 
+#pragma mark - 发送pull事件
 - (void)fireEvent:(int)state :(CGFloat)y
 {
     doJsonNode *node = [[doJsonNode alloc] init];

@@ -46,7 +46,6 @@
         doUIModule *childViewModel = [_model.ChildUIModules objectAtIndex:0];
         _childView = childViewModel.CurrentUIModuleView;
         [self addSubview:(UIView *) _childView];
-        [self OnRedraw];
     }
     else
         [NSException raise:@"doScrollView" format:@"没有子视图",nil];
@@ -76,7 +75,11 @@
     //重新调整视图的x,y,w,h
     [doUIModuleHelper OnRedraw:_model];
     if(_childView)  [_childView OnRedraw];
-    if(_headView)   [_headView OnRedraw];
+    if(_headView)
+    {
+        [_headView OnRedraw];
+        [self setContent];
+    }
 }
 
 #pragma mark - TYPEID_IView协议方法（必须）
@@ -142,11 +145,6 @@
         return;
     }
     [self addSubview:insertView];
-    
-    //headView布局问题
-    [self OnRedraw];
-    [self setContent];
-    
     //const CGFloat *color = CGColorGetComponents([insertView.backgroundColor CGColor]);
     //self.backgroundColor = [UIColor colorWithRed:color[0]/255 green:color[1]/255 blue:color[3]/255 alpha:color[4]/255];
 }

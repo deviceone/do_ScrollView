@@ -61,12 +61,6 @@
         [[_headView GetModel] Dispose];
         _headView = nil;
     }
-    if(_childView)
-    {
-        [((UIView *)_childView) removeFromSuperview];
-        [[_childView GetModel] Dispose];
-        _childView = nil;
-    }
     _model = nil;
 }
 //实现布局

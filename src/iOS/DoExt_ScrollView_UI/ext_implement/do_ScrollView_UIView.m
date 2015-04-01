@@ -69,11 +69,8 @@
     //重新调整视图的x,y,w,h
     [doUIModuleHelper OnRedraw:_model];
     if(_childView)  [_childView OnRedraw];
-    if(_headView)
-    {
-        [_headView OnRedraw];
-        [self setContent];
-    }
+    if(_headView)  [_headView OnRedraw];
+    [self setContent];
 }
 
 #pragma mark - TYPEID_IView协议方法（必须）

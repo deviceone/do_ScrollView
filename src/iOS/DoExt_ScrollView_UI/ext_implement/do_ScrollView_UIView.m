@@ -61,7 +61,6 @@
         [[_headView GetModel] Dispose];
         _headView = nil;
     }
-    _model = nil;
 }
 //实现布局
 - (void) OnRedraw

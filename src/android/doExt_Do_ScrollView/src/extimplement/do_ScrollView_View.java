@@ -51,7 +51,6 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 	private int mHeaderState;
 	private int mPullState;
 	private boolean supportHeaderRefresh;
-	private String headerViewAddress; // headerview 的地址
 	
 
 	public do_ScrollView_View(Context context) {
@@ -85,8 +84,8 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 
 					DoUIContainer _rootUIContainer = new DoUIContainer(_doPage);
 					_rootUIContainer.loadFromFile(_uiFile, null, null);
+					_rootUIContainer.loadDefalutScriptFile(_headerViewPath);
 					DoUIModule _model = _rootUIContainer.getRootView();
-					headerViewAddress = _model.getUniqueKey();
 
 					View _headerView = (View) _model.getCurrentUIModuleView();
 					// 设置headerView 的 宽高
@@ -146,10 +145,6 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 		}
 		if ("toEnd".equals(_methodName)) {
 			toEnd(_dictParas, _scriptEngine, _invokeResult);
-			return true;
-		}
-		if ("getHeaderView".equals(_methodName)) {
-			getHeaderView(_dictParas, _scriptEngine, _invokeResult);
 			return true;
 		}
 		if ("rebound".equals(_methodName)) {
@@ -534,14 +529,6 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 	public void toEnd(DoJsonNode _dictParas, DoIScriptEngine _scriptEngine,
 			DoInvokeResult _invokeResult) throws Exception {
 		doIScrollView.toEnd();
-		
-	}
-
-	@Override
-	public void getHeaderView(DoJsonNode _dictParas,
-			DoIScriptEngine _scriptEngine, DoInvokeResult _invokeResult)
-			throws Exception {
-		_invokeResult.setResultText(headerViewAddress);
 		
 	}
 

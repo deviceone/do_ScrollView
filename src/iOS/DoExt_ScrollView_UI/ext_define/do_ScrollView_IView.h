@@ -23,6 +23,5 @@
 - (void)getOffsetX:(NSArray *)parms;
 - (void)getOffsetY:(NSArray *)parms;
 - (void)rebound:(NSArray *)parms;
-- (void)getHeaderView:(NSArray *)parms;
 
 @end

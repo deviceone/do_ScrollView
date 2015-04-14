@@ -135,6 +135,7 @@
         return;
     }
     [self addSubview:insertView];
+    [container LoadDefalutScriptFile:herderView];
     //const CGFloat *color = CGColorGetComponents([insertView.backgroundColor CGColor]);
     //self.backgroundColor = [UIColor colorWithRed:color[0]/255 green:color[1]/255 blue:color[3]/255 alpha:color[4]/255];
 }
@@ -206,13 +207,6 @@
         self.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }];
 }
-- (void)getHeaderView:(NSArray *)parms
-{
-    doInvokeResult *_invokeResult = [parms objectAtIndex:2];
-    doUIModule *headViewModel = [_headView GetModel];
-    [_invokeResult SetResultText:[headViewModel UniqueKey]];
-}
-
 #pragma mark - scroll delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

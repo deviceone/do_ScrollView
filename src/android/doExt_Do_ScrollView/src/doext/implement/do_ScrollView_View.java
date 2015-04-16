@@ -1,4 +1,4 @@
-package extimplement;
+package doext.implement;
 
 import java.util.Map;
 
@@ -22,8 +22,8 @@ import core.object.DoInvokeResult;
 import core.object.DoSourceFile;
 import core.object.DoUIContainer;
 import core.object.DoUIModule;
-import extdefine.do_ScrollView_IMethod;
-import extdefine.do_ScrollView_MAbstract;
+import doext.define.do_ScrollView_IMethod;
+import doext.define.do_ScrollView_MAbstract;
 
 /**
  * 自定义扩展UIView组件实现类，此类必须继承相应VIEW类，并实现DoIUIModuleView,Do_ScrollView_IMethod接口；

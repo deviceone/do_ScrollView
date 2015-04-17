@@ -54,6 +54,10 @@ namespace do_ScrollView.extimplement
                     scroll.Content = _view;
                 }
             }
+            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            scroll.VerticalScrollMode = ScrollMode.Enabled;
+                scroll.HorizontalScrollMode = ScrollMode.Disabled;
         }
         public doUIModule GetModel()
         {
@@ -90,31 +94,39 @@ namespace do_ScrollView.extimplement
             {
                 if (_changedValues["isShowbar"] == "true")
                 {
-                    if (_changedValues.Keys.Contains("direction"))
-                    {
-                        if (_changedValues["direction"] == "horizontal")
-                        {
-                            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                        }
-                        else
-                        {
-                            scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                            scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                        }
-                    }
-                    else
-                    {
-                        scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                        scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-                        scroll.VerticalScrollMode = ScrollMode.Enabled;
-                        scroll.HorizontalScrollMode = ScrollMode.Disabled;
-                    }
+                    scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                }
+                else
+                {
+                    scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
             }
+            
+
+
+            if (_changedValues.Keys.Contains("direction"))
+            {
+                if (_changedValues["direction"] == "horizontal")
+                {
+                    scroll.VerticalScrollMode = ScrollMode.Disabled;
+                    scroll.HorizontalScrollMode = ScrollMode.Enabled;
+                }
+                else
+                {
+                    scroll.VerticalScrollMode = ScrollMode.Enabled;
+                    scroll.HorizontalScrollMode = ScrollMode.Disabled;
+                }
+            }
+
             if (_changedValues.Keys.Contains("headerView"))
             {
 
+            }
+            if (_changedValues.Keys.Contains("bgColor"))
+            {
+                scroll.Background = doUIModuleHelper.GetColorFromString(_changedValues["bgColor"], new SolidColorBrush(Colors.White));
             }
         }
         public bool InvokeSyncMethod(string _methodName, doJsonNode _dictParas, doIScriptEngine _scriptEngine, doInvokeResult _invokeResult)
@@ -143,6 +155,14 @@ namespace do_ScrollView.extimplement
         {
             try
             {
+                if (this.model.GetPropertyValue("direction") == "horizontal")
+                {
+                    scroll.ChangeView(0, null, null);
+                }
+                else
+                {
+                    scroll.ChangeView(null,0, null);
+                }
 
             }
             catch (Exception _err)
@@ -154,7 +174,14 @@ namespace do_ScrollView.extimplement
         {
             try
             {
-
+                if (this.model.GetPropertyValue("direction") == "horizontal")
+                {
+                    scroll.ChangeView(scroll.ScrollableWidth, null, null);
+                }
+                else
+                {
+                    scroll.ChangeView(null, scroll.ScrollableHeight, null);
+                }
             }
             catch (Exception _err)
             {

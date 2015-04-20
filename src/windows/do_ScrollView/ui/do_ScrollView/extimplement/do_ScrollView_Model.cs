@@ -22,7 +22,7 @@ namespace do_ScrollView.extimplement
             base.OnInit();
             this.RegistProperty(new doProperty("direction", PropertyDataType.String, "vertical", false));
             this.RegistProperty(new doProperty("isShowbar", PropertyDataType.Bool, "false", false));
-            this.RegistProperty(new doProperty("herderView", PropertyDataType.String, "", false));
+            this.RegistProperty(new doProperty("headerView", PropertyDataType.String, "", false));
         
         }
         public override async Task<bool> InvokeAsyncMethod(string _methodName, doCore.Helper.JsonParse.doJsonNode _dictParas, doCore.Interface.doIScriptEngine _scriptEngine, string _callbackFuncName)

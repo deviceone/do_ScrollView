@@ -4,7 +4,6 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -337,13 +336,6 @@ public class do_ScrollView_View extends LinearLayout implements DoIUIModuleView,
 		mHeaderState = REFRESHING;
 		setHeaderTopMargin(0);
 		doPullRefresh(mHeaderState, 0);
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				onHeaderRefreshComplete();
-			}
-		}, 3000);
-
 	}
 
 	/**

@@ -269,9 +269,10 @@
 #pragma mark - 发送pull事件
 - (void)fireEvent:(int)state :(CGFloat)y
 {
-    doJsonNode *node = [[doJsonNode alloc] init];
-    [node SetOneInteger:@"state" :state];
-    [node SetOneText:@"y" :[NSString stringWithFormat:@"%f",y]];
+    NSMutableDictionary *node = [[NSMutableDictionary alloc] init];
+    [node setObject:@(state) forKey:@"state"];
+    id s = !@(y)?@"":@(y);
+    [node setObject:s forKey:@"y"];
     doInvokeResult* _invokeResult = [[doInvokeResult alloc]init:_model.UniqueKey];
     [_invokeResult SetResultNode:node];
     [_model.EventCenter FireEvent:@"pull":_invokeResult];
@@ -288,12 +289,12 @@
     //_model的属性进行修改，同时调用self的对应的属性方法，修改视图
     [doUIModuleHelper HandleViewProperChanged: self :_model : _changedValues ];
 }
-- (BOOL) InvokeSyncMethod: (NSString *) _methodName : (doJsonNode *)_dicParas :(id<doIScriptEngine>)_scriptEngine : (doInvokeResult *) _invokeResult
+- (BOOL) InvokeSyncMethod: (NSString *) _methodName : (NSDictionary *)_dicParas :(id<doIScriptEngine>)_scriptEngine : (doInvokeResult *) _invokeResult
 {
     //同步消息
     return [doScriptEngineHelper InvokeSyncSelector:self : _methodName :_dicParas :_scriptEngine :_invokeResult];
 }
-- (BOOL) InvokeAsyncMethod: (NSString *) _methodName : (doJsonNode *) _dicParas :(id<doIScriptEngine>) _scriptEngine : (NSString *) _callbackFuncName
+- (BOOL) InvokeAsyncMethod: (NSString *) _methodName : (NSDictionary *) _dicParas :(id<doIScriptEngine>) _scriptEngine : (NSString *) _callbackFuncName
 {
     //异步消息
     return [doScriptEngineHelper InvokeASyncSelector:self : _methodName :_dicParas :_scriptEngine: _callbackFuncName];
@@ -303,5 +304,6 @@
     //获取model对象
     return _model;
 }
+
 
 @end
